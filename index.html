@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRESKO | فريزكو</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f7f9f5;
+      color: #203326;
+    }
+
+    header {
+      background: #176b43;
+      color: white;
+      padding: 18px 5%;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .logo span {
+      color: #c6f36a;
+    }
+
+    .cart-btn {
+      background: white;
+      color: #176b43;
+      border: none;
+      border-radius: 25px;
+      padding: 11px 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 35px 5%;
+      background: linear-gradient(135deg, #e4f5d9, #f7f9f5);
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      color: #176b43;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      line-height: 1.8;
+      color: #526653;
+    }
+
+    .search {
+      display: block;
+      width: 90%;
+      max-width: 600px;
+      margin: 22px auto;
+      padding: 15px;
+      border: 1px solid #dce5d8;
+      border-radius: 14px;
+      font-size: 16px;
+      background: white;
+      outline-color: #176b43;
+    }
+
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 0 15px 25px;
+    }
+
+    .category {
+      border: 1px solid #d5e5d2;
+      background: white;
+      padding: 11px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      color: #176b43;
+      font-weight: bold;
+    }
+
+    .category.active,
+    .category:hover {
+      background: #176b43;
+      color: white;
+    }
+
+    .section-title {
+      padding: 0 5%;
+      margin-bottom: 18px;
+      font-size: 22px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 15px;
+      padding: 0 5% 35px;
+    }
+
+    .product {
+      background: white;
+      border: 1px solid #edf0e9;
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 4px 15px #173d1410;
+    }
+
+    .product .emoji {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f0f7e9;
+      border-radius: 14px;
+      height: 110px;
+      font-size: 55px;
+      margin-bottom: 12px;
+    }
+
+    .product h3 {
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      color: #176b43;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .add {
+      width: 100%;
+      padding: 10px;
+      background: #176b43;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .add:hover {
+      background: #105333;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+      grid-column: 1 / -1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 22px;
+      background: #123f2b;
+      color: #e5f4e7;
+      line-height: 1.8;
+    }
+
+    #cartPanel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #0008;
+      z-index: 10;
+      padding: 15px;
+    }
+
+    .cart-content {
+      background: white;
+      max-width: 450px;
+      margin: 35px auto;
+      padding: 22px;
+      border-radius: 18px;
+      max-height: 80vh;
+      overflow: auto;
+    }
+
+    .cart-content h2 {
+      margin-bottom: 18px;
+    }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .close {
+      float: left;
+      background: #eee;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 12px;
+      cursor: pointer;
+    }
+
+    .total {
+      font-size: 19px;
+      font-weight: bold;
+      margin: 18px 0;
+      color: #176b43;
+    }
+
+    @media (min-width: 700px) {
+      .hero h1 {
+        font-size: 38px;
+      }
+
+      .products {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="top">
+      <div class="logo">FRESKO<span>.</span></div>
+      <button class="cart-btn" onclick="openCart()">
+        🛒 السلة (<span id="cartCount">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>خضار وفاكهة طازة لحد باب بيتك 🍃</h1>
+    <p>
+      اختار أجود المنتجات الطازجة، اطلب بسهولة،
+      وخلي فريزكو يوصّل لك الخير.
+    </p>
+  </section>
+
+  <input
+    class="search"
+    id="search"
+    type="search"
+    placeholder="🔍 ابحث عن خضار أو فاكهة..."
+    oninput="renderProducts()"
+  >
+
+  <div class="categories">
+    <button class="category active" onclick="setCategory('الكل',this)">الكل</button>
+    <button class="category" onclick="setCategory('فاكهة',this)">🍎 الفاكهة</button>
+    <button class="category" onclick="setCategory('خضار',this)">🥦 الخضار</button>
+  </div>
+
+  <h2 class="section-title">منتجاتنا الطازجة</h2>
+
+  <main class="products" id="products"></main>
+
+  <div id="cartPanel" onclick="closeCart(event)">
+    <div class="cart-content" onclick="event.stopPropagation()">
+      <button class="close" onclick="hideCart()">إغلاق ✕</button>
+      <h2>🛒 سلة مشترياتك</h2>
+      <div id="cartItems"></div>
+      <div class="total" id="cartTotal">الإجمالي: 0 جنيه</div>
+      <p style="color:#777;line-height:1.8">
+        دي سلة تجريبية. هنضيف إتمام الطلب والتسجيل برقم الهاتف بعد تجهيز قاعدة البيانات.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <strong>FRESKO | فريزكو</strong>
+    <p>طازة لحد باب بيتك 🍃</p>
+    <small>© 2026 FRESKO</small>
+  </footer>
+
+  <script>
+    const products = [
+      {id:1, name:"جوافة", price:50, category:"فاكهة", emoji:"🍐"},
+      {id:2, name:"موز", price:40, category:"فاكهة", emoji:"🍌"},
+      {id:3, name:"تفاح", price:75, category:"فاكهة", emoji:"🍎"},
+      {id:4, name:"برتقال", price:35, category:"فاكهة", emoji:"🍊"},
+      {id:5, name:"طماطم", price:20, category:"خضار", emoji:"🍅"},
+      {id:6, name:"خيار", price:25, category:"خضار", emoji:"🥒"},
+      {id:7, name:"جزر", price:30, category:"خضار", emoji:"🥕"},
+      {id:8, name:"فلفل", price:35, category:"خضار", emoji:"🫑"}
+    ];
+
+    let selectedCategory = "الكل";
+    let cart = [];
+
+    function renderProducts() {
+      const search = document.getElementById("search").value.trim();
+      const filtered = products.filter(p =>
+        (selectedCategory === "الكل" || p.category === selectedCategory) &&
+        p.name.includes(search)
+      );
+
+      const container = document.getElementById("products");
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty">مفيش منتجات مطابقة للبحث.</div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(p => `
+        <article class="product">
+          <div class="emoji">${p.emoji}</div>
+          <h3>${p.name}</h3>
+          <div class="price">${p.price} جنيه / كيلو</div>
+          <button class="add" onclick="addToCart(${p.id})">
+            أضف للسلة +
+          </button>
+        </article>
+      `).join("");
+    }
+
+    function setCategory(category, button) {
+      selectedCategory = category;
+
+      document.querySelectorAll(".category").forEach(b =>
+        b.classList.remove("active")
+      );
+
+      button.classList.add("active");
+      renderProducts();
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const item = cart.find(i => i.id === id);
+
+      if (item) {
+        item.quantity++;
+      } else {
+        cart.push({...product, quantity:1});
+      }
+
+      updateCart();
+    }
+
+    function updateCart() {
+      const count = cart.reduce((sum,item) => sum + item.quantity, 0);
+      document.getElementById("cartCount").textContent = count;
+
+      document.getElementById("cartItems").innerHTML =
+        cart.length ? cart.map(item => `
+          <div class="cart-row">
+            <span>${item.emoji} ${item.name} × ${item.quantity}</span>
+            <span>${item.price * item.quantity} جنيه</span>
+          </div>
+        `).join("") : "<p>السلة فارغة.</p>";
+
+      const total = cart.reduce(
+        (sum,item) => sum + item.price * item.quantity, 0
+      );
+
+      document.getElementById("cartTotal").textContent =
+        "الإجمالي: " + total + " جنيه";
+    }
+
+    function openCart() {
+      document.getElementById("cartPanel").style.display = "block";
+      updateCart();
+    }
+
+    function hideCart() {
+      document.getElementById("cartPanel").style.display = "none";
+    }
+
+    function closeCart(event) {
+      if (event.target.id === "cartPanel") hideCart();
+    }
+
+    renderProducts();
+    updateCart();
+  </script>
+
+</body>
+  </html>
+                                              
